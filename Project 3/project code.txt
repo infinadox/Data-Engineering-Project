@@ -1,0 +1,121 @@
+python -m venv env
+source env/bin/activate
+pip install pandas sqlite3 Flask
+
+import pandas as pd
+import sqlite3
+
+# Load dataset
+data = pd.read_csv('e-commerce_data.csv')
+
+# Transform data
+# Assuming the dataset has columns like 'CustomerID', 'Name', 'Email', 'Location', 'DateJoined', 'TransactionID', 'Date', 'Amount', 'ProductCategory'
+customers = data[['CustomerID', 'Name', 'Email', 'Location', 'DateJoined', 'TotalSpent']].drop_duplicates()
+transactions = data[['TransactionID', 'CustomerID', 'Date', 'Amount', 'ProductCategory']]
+
+# Connect to SQLite database
+conn = sqlite3.connect('ecommerce.db')
+cur = conn.cursor()
+
+# Create tables
+cur.execute('''
+CREATE TABLE IF NOT EXISTS Customers (
+    CustomerID INTEGER PRIMARY KEY,
+    Name TEXT,
+    Email TEXT,
+    Location TEXT,
+    DateJoined DATE,
+    TotalSpent REAL
+)
+''')
+
+cur.execute('''
+CREATE TABLE IF NOT EXISTS Transactions (
+    TransactionID INTEGER PRIMARY KEY,
+    CustomerID INTEGER,
+    Date DATE,
+    Amount REAL,
+    ProductCategory TEXT,
+    FOREIGN KEY (CustomerID) REFERENCES Customers (CustomerID)
+)
+''')
+
+# Insert data into tables
+customers.to_sql('Customers', conn, if_exists='replace', index=False)
+transactions.to_sql('Transactions', conn, if_exists='replace', index=False)
+
+conn.commit()
+conn.close()
+
+from flask import Flask, jsonify
+import sqlite3
+
+app = Flask(__name__)
+
+def query_db(query, args=(), one=False):
+    conn = sqlite3.connect('ecommerce.db')
+    cur = conn.cursor()
+    cur.execute(query, args)
+    rv = cur.fetchall()
+    conn.close()
+    return (rv[0] if rv else None) if one else rv
+
+@app.route('/customers', methods=['GET'])
+def get_customers():
+    customers = query_db('SELECT * FROM Customers')
+    return jsonify(customers)
+
+@app.route('/transactions', methods=['GET'])
+def get_transactions():
+    transactions = query_db('SELECT * FROM Transactions')
+    return jsonify(transactions)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+# E-Commerce Trends Project
+
+## Database Design
+
+### Choice of Database
+We chose SQLite for its simplicity and ease of use in prototyping and small-scale applications. SQLite is a lightweight, disk-based database that doesn’t require a separate server process.
+
+### Schema
+#### Customers Table
+- CustomerID (Primary Key)
+- Name
+- Email
+- Location
+- DateJoined
+- TotalSpent
+
+#### Transactions Table
+- TransactionID (Primary Key)
+- CustomerID (Foreign Key)
+- Date
+- Amount
+- ProductCategory
+
+## ETL Workflow
+1. **Extract**: Load the dataset from the CSV file.
+2. **Transform**: 
+   - Clean and preprocess the data.
+   - Split data into Customers and Transactions tables.
+3. **Load**: Insert transformed data into SQLite database.
+
+### ETL Diagram
+![ETL Diagram](etl_diagram.png)
+
+## Additional Library
+- Flask: Used to create a simple API to access the data.
+
+## Data Access
+The data can be accessed using the provided Flask API:
+- `/customers`: Returns all customer records.
+- `/transactions`: Returns all transaction records.
+
+python etl.py
+
+python app.py
+
+
