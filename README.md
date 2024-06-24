@@ -112,3 +112,13 @@ While SQLite is suitable for this project, larger datasets and higher concurrenc
 This project successfully demonstrated how to extract, transform, and load e-commerce data into a relational database, perform meaningful analyses, and visualize the results. The insights gained from this analysis can help improve product management, marketing strategies, and overall business operations. The attention to ethical consideration ensures that the project was conducted responsibly, respecting data privacy, security, and fairness.
 
 By leveraging the power of data analysis and visualization, businesses can make more informed decisions, optimize their operations, and better meet the needs of their customers. This project serves as a foundational step towards more advanced and impactful data-driven strategies in e-commerce.
+
+## References
+
+- **Riaz, M.** (2024, June). Exploring E-commerce Trends, Version 2. Retrieved June 11, 2024, from [Kaggle](https://www.kaggle.com/datasets/muhammadroshaanriaz/e-commerce-trends-a-guide-to-leveraging-dataset).
+- **Waskom, M.** (2012). Statistical Data Visualization. Seaborn. Retrieved from [Seaborn Documentation](https://seaborn.pydata.org/index.html).
+- **Pandas Documentation**. (2024, April 10). Retrieved from [Pandas](https://pandas.pydata.org/docs/).
+- **SQLite Documentation**. (2004, April 23). Retrieved from [SQLite](https://www.sqlite.org/docs.html).
+- **NumPy Documentation**. (2008). Retrieved from [NumPy](https://numpy.org/doc/).
+- **Hunter, J.** (2002). Matplotlib 3.9.0 documentation. Retrieved from [Matplotlib](https://matplotlib.org/stable/api/pyplot_summary.html).
+- **Python API Reference for Plotly - 5.22.0 Documentation**. (2013, August). Retrieved from [Plotly](https://plotly.com/python-api-reference/).
